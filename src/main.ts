@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { logger } from './common/middlewares/logger.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,9 @@ async function bootstrap() {
       transform: true, // Transform payloads to typed objects
     }),
   );
+
+  // Log every new request
+  app.use(logger);
 
   await app.listen(3000);
 }
