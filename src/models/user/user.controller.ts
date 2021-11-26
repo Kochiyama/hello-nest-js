@@ -27,20 +27,21 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id', new ParseIntPipe()) id: number): string {
+  findOne(@Param('id', ParseIntPipe) id: number): string {
+    console.log(typeof id);
     return this.userService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id', new ParseIntPipe()) id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): string {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete(':id')
-  remove(@Param('id', new ParseIntPipe()) id: number): string {
+  remove(@Param('id', ParseIntPipe) id: number): string {
     return this.userService.remove(id);
   }
 }
