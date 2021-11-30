@@ -6,42 +6,42 @@ import {
   Patch,
   Param,
   Delete,
-  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from '.prisma/client';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): string {
+  create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findAll(): Promise<User[]> {
+    return this.userService.findAll({});
   }
 
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number): string {
-    console.log(typeof id);
-    return this.userService.findOne(id);
+  @Get(':uuid')
+  findOne(@Param('uuid', ParseUUIDPipe) uuid: string): Promise<User> {
+    return this.userService.findOne(uuid);
   }
 
-  @Patch(':id')
+  @Patch(':uuid')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('uuid', ParseUUIDPipe) uuid: string,
     @Body() updateUserDto: UpdateUserDto,
-  ): string {
-    return this.userService.update(id, updateUserDto);
+  ): Promise<User> {
+    return this.userService.update(uuid, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number): string {
-    return this.userService.remove(id);
+  @Delete(':uuid')
+  remove(@Param('uuid', ParseUUIDPipe) uuid: string): Promise<User> {
+    return this.userService.remove(uuid);
   }
 }
